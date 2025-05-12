@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UploadFile: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const navigate = useNavigate(); //for navigation
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -14,8 +16,11 @@ const UploadFile: React.FC = () => {
       return;
     }
 
-    // For now, just logging. You could send it to a server here.
+    // Simulate upload (temporary - FILE UPLOAD STUFF GOES HERE)
     console.log("Uploading file:", selectedFile.name);
+
+    // Navigate to the analysis page, only when a file is uploaded
+    navigate('/analysis');
   };
 
   return (
