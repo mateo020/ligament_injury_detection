@@ -18,19 +18,20 @@ function Analysis() {
             </header>
 
             <main className="w-screen flex">
-                
-                {/* TODO make the divs wider prolly shorter too and a 50/50 size split - just make it like the new image */}
                 <section className=" bg-gray-50 h-9/10 w-1/2 flex justify-center rounded-2xl absolute top-20 left-20">
                     {/* IDK why this div bellow makes everything nicely aligned */}
                     <div>
                     
-                    <div className="pt-5">Deep Clinical Search</div>
+                    {/* TODO : change this to a little icon */}
+                    <div className="pt-5">Image</div>
+
+                    {/* TODO : add the buttons on the bottom and the labels on the left (ask mateo if wewill have the labels) */}
                    
                     <img 
                         // TODO: change this image to uploaded image
                         src="https://www.hss.edu/images/articles/acl-tear.jpg"
                         alt="bones"
-                        className=" pt-15"
+                        className="pt-5 h-9/10 w-7/10 absolute right-8"
                     /> 
                     
                     </div>
@@ -38,7 +39,8 @@ function Analysis() {
                 </section>
 
                 <aside className="bg-gray-50 h-9/10 w-4/10 absolute top-20 left-262 justify-center rounded-2xl ml-5">
-                    <div className="pt-5">Explain My Scan</div> 
+                    {/* TODO : change this to a little icon */}
+                    <div className="pt-5">Chat</div> 
                 </aside>
             </main>
         </>
