@@ -12,7 +12,7 @@ function Home(){
       <h1 className='pb-5 pt-35'>ACL Ligament Helper</h1>
       <p className='pb-5'>Classify and detect types of ACL tears in MRI images with our algorythms</p>
       <Link to="/upload">
-        <button className='text-white'>
+        <button className='main bg-orange-500/50 text-orange-800 px-4 py-2'>
           Get Started
         </button>
       </Link>

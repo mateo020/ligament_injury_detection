@@ -28,7 +28,7 @@ const UploadFile: React.FC = () => {
       <h2>Upload File</h2>
       <input type="file" onChange={handleFileChange} />
       {selectedFile && <p>Selected File: {selectedFile.name}</p>}
-      <button onClick={handleUpload} disabled={!selectedFile}>
+      <button onClick={handleUpload} disabled={!selectedFile} className='main bg-orange-500/50 text-orange-800 px-4 py-2'>
         Upload
       </button>
     </div>
