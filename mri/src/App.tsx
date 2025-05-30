@@ -16,7 +16,7 @@ function Home(){
           Get Started
         </button>
       </Link>
-      <img src="https://www.hss.edu/images/articles/acl-tear.jpg" alt="bones"
+      <img src="https://upload.orthobullets.com/topic/3008/images/discon.jpg" alt="bones"
           width="500" 
           height="500" />
     </div>

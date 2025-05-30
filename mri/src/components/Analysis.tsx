@@ -64,7 +64,7 @@ function Analysis() {
                         {/* ACL Tear MRI Image */}
                         <img 
                             // TODO: change this image to uploaded image
-                            src="https://www.hss.edu/images/articles/acl-tear.jpg"
+                            src="https://upload.orthobullets.com/topic/3008/images/discon.jpg"
                             alt="bones"
                             className="pt-12 h-[85%] w-[76%] absolute right-12"
                         /> 
