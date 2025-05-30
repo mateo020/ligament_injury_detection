@@ -93,7 +93,7 @@ function Analysis() {
                         </div>
                     </div>
 
-                    {/* TODO: complete the chat section */}
+                    {/* TODO: complete the chat section - needs backend*/}
                 </aside>
             </main>
         </>
