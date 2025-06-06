@@ -23,8 +23,8 @@ function Analysis() {
             <Header navigate={navigate} />
 
             {/* main section */}
-            <main className="w-screen flex flex-col md:flex-row md:items-start md:justify-start pt-15 gap-4">
-                <MRISection />
+            <main className="w-screen flex flex-col md:flex-row md:items-start md:justify-start pt-15 pl-25 gap-4">
+                <MRISection />    
                 <ChatSection />
             </main>
         </>

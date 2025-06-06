@@ -22,7 +22,7 @@ function MRISection() {
                     // TODO: change this image to uploaded image
                     src="https://upload.orthobullets.com/topic/3008/images/discon.jpg"
                     alt="bones"
-                    className="pt-24 md:pt-12 h-[85%] w-[76%]"
+                    className=" pl-35 pt-24 md:pt-12 h-[85%] w-[85%]"
                 /> 
 
                 {/* TODO: add functionality to the buttons */}
