@@ -7,6 +7,7 @@ import './App.css'
 
 function Home(){
   return(
+    // TODO: center this on the page
     <>
     <div className="columns-2">
       <h1 className='pb-5 pt-35'>ACL Ligament Helper</h1>

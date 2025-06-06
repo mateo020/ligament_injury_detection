@@ -1,6 +1,6 @@
 function MRISection() {
     return (
-        <section className="bg-gray-50 w-full flex justify-center rounded-2xl relative">
+        <section className="bg-gray-50 w-1/2 flex justify-center rounded-2xl relative">
             <div className="flex flex-col items-center w-full relative">
 
                 {/* Image Bubble */}

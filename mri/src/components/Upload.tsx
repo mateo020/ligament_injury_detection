@@ -24,6 +24,7 @@ const UploadFile: React.FC = () => {
   };
 
   return (
+    // TODO: center this on the page
     <div style={{ padding: "1rem" }}>
       <h2>Upload File</h2>
       <input type="file" onChange={handleFileChange} />
