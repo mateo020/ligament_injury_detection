@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import Upload from "./components/Upload";
-import Analysis from "./components/Analysis";
+import Analysis from "./pages/Analysis";
 import './App.css'
 
 
