@@ -4,8 +4,10 @@ import Header from '../components/Header';
 import MRISection from '../components/MRISection';
 import ChatSection from '../components/ChatSection';
 
+
 function Analysis() {  
     const navigate = useNavigate(); //for navigation 
+
     
     // useEffect(() => {
     //   // Disable scrolling
