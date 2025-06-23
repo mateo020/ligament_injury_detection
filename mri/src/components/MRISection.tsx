@@ -1,4 +1,9 @@
+import { useLocation } from 'react-router-dom';
+
 function MRISection() {
+    const location = useLocation();
+    const imageURL = (location.state as { imageURL: string })?.imageURL;
+
     return (
         <section className="bg-gray-50 w-1/2 flex justify-center rounded-2xl relative">
             <div className="flex flex-col items-center w-full relative">
@@ -18,12 +23,17 @@ function MRISection() {
                 </div>
 
                 {/* ACL Tear MRI Image */}
-                <img 
+                {/* <img 
                     // TODO: change this image to uploaded image
                     src="https://upload.orthobullets.com/topic/3008/images/discon.jpg"
                     alt="bones"
                     className=" pl-35 pt-24 md:pt-12 h-[85%] w-[85%]"
-                /> 
+                />  */}
+                {imageURL ? (
+                    <img src={imageURL} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[85%] w-[85%]" />
+                    ) : (
+                     <p>No image found.</p>
+                )}
 
                 {/* TODO: add functionality to the buttons */}
                 {/* Buttons */}

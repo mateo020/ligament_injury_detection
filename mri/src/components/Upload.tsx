@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// import UploadImage from './UploadImage';
+// import DisplayImage from './DisplayImage';
 
 const UploadFile: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -20,8 +22,12 @@ const UploadFile: React.FC = () => {
     console.log("Uploading file:", selectedFile.name);
 
     // Navigate to the analysis page, only when a file is uploaded
-    navigate('/analysis');
-  };
+  navigate('/analysis', {
+    state: {
+      imageURL: selectedFile ? URL.createObjectURL(selectedFile) : null
+    }
+  });
+};
 
   return (
     <div style={{ padding: "1rem" }}>
