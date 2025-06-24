@@ -1,8 +1,47 @@
 import { useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
 
 function MRISection() {
     const location = useLocation();
-    const imageURL = (location.state as { imageURL: string })?.imageURL;
+    const initialImageURL = (location.state as { imageURL: string })?.imageURL;
+    const [localImage, setLocalImage] = useState<string | null>(initialImageURL || null);
+    const [dicomFileName, setDicomFileName] = useState<string | null>(null);
+
+    const imageInputRef = useRef<HTMLInputElement>(null);
+    const dicomInputRef = useRef<HTMLInputElement>(null);
+
+    // Handle regular image files
+    const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+            alert('Only JPG or PNG images are allowed.');
+            event.target.value = '';
+            return;
+        }
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setLocalImage(imageUrl);
+            setDicomFileName(null); // Clear DICOM if a new image is uploaded
+        }
+    };
+
+    // Handle DICOM file upload
+    const handleDICOMFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file && !file.name.endsWith('.dcm')) {
+            alert('Only DICOM (.dcm) files are allowed.');
+            event.target.value = '';
+            return;
+        }
+
+        if (file) {
+            setDicomFileName(file.name);
+            setLocalImage(null); // Clear image if a new DICOM is uploaded
+        }
+    };
 
     return (
         <section className="bg-gray-50 w-1/2 flex justify-center rounded-2xl relative">
@@ -22,27 +61,53 @@ function MRISection() {
                     <span className="bg-orange-500 w-15 h-2 inline-block ml-2"></span>
                 </div>
 
-                {/* ACL Tear MRI Image */}
-                {/* <img 
-                    // TODO: change this image to uploaded image
-                    src="https://upload.orthobullets.com/topic/3008/images/discon.jpg"
-                    alt="bones"
-                    className=" pl-35 pt-24 md:pt-12 h-[85%] w-[85%]"
-                />  */}
-                {imageURL ? (
-                    <img src={imageURL} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[85%] w-[85%]" />
-                    ) : (
-                     <p>No image found.</p>
+                {/* Display Image or DICOM */}
+                {localImage ? (
+                    <img src={localImage} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[80%] w-[80%]" />
+                ) : dicomFileName ? (
+                    <p className="pt-24 text-center text-orange-800">
+                        DICOM file uploaded: <strong>{dicomFileName}</strong><br />
+                        {/* Placeholder: actual DICOM viewer would be embedded here */}
+                    </p>
+                ) : (
+                    <p className="pt-24">No image found.</p>
                 )}
 
                 {/* TODO: add functionality to the buttons */}
                 {/* Buttons */}
                 <div className="mt-6 mb-4 grid grid-cols-2 gap-2 w-full max-w-md px-4">
-                    <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload X-Ray</button>
-                    <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload DICOM</button>
+                    <button
+                        onClick={() => imageInputRef.current?.click()}
+                        className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
+                    >
+                        Upload X-Ray
+                    </button>
+                    <button
+                        onClick={() => dicomInputRef.current?.click()}
+                        className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
+                    >
+                        Upload DICOM
+                    </button>
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Clear Chat</button>
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">New Thread</button>
                 </div>
+
+                {/* Hidden Inputs */}
+                <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    ref={imageInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleImageFileChange}
+                />
+
+                <input
+                    type="file"
+                    accept=".dcm"
+                    ref={dicomInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleDICOMFileChange}
+                />
             </div>
         </section>
     );
