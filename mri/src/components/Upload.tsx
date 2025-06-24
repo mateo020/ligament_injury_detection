@@ -10,21 +10,15 @@ const UploadFile: React.FC = () => {
 const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0] || null;
 
-    if (file) {
-      const fileName = file.name.toLowerCase();
-      const isImage = ['image/jpeg', 'image/png'].includes(file.type);
-      const isDICOM = fileName.endsWith('.dcm');
+  if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+    alert('Only JPG or PNG images are allowed.');
+    event.target.value = ''; // reset input
+    setSelectedFile(null);
+    return;
+  }
 
-      if (!isImage && !isDICOM) {
-        alert('Only JPG, PNG, or DICOM (.dcm) files are allowed.');
-        event.target.value = '';
-        setSelectedFile(null);
-        return;
-      }
-
-      setSelectedFile(file);
-    }
-  };
+  setSelectedFile(file);
+};
 
   const handleUpload = () => {
     if (!selectedFile) {
@@ -36,29 +30,19 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Uploading file:", selectedFile.name);
 
     // Navigate to the analysis page, only when a file is uploaded
-    navigate('/analysis', {
-      state: {
-        imageURL: selectedFile.name.endsWith('.dcm')
-          ? null
-          : URL.createObjectURL(selectedFile)
-      }
-    });
-  };
+  navigate('/analysis', {
+    state: {
+      imageURL: selectedFile ? URL.createObjectURL(selectedFile) : null
+    }
+  });
+};
 
   return (
     <div style={{ padding: "1rem" }}>
       <h2>Upload File</h2>
-      <input
-        type="file"
-        accept=".dcm, image/jpeg, image/png"
-        onChange={handleFileChange}
-      />
+      <input type="file" accept="image/*" onChange={handleFileChange} />
       {selectedFile && <p>Selected File: {selectedFile.name}</p>}
-      <button
-        onClick={handleUpload}
-        disabled={!selectedFile}
-        className='main bg-orange-500/50 text-orange-800 px-4 py-2'
-      >
+      <button onClick={handleUpload} disabled={!selectedFile} className='main bg-orange-500/50 text-orange-800 px-4 py-2'>
         Upload
       </button>
     </div>

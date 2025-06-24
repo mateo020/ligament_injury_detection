@@ -5,13 +5,10 @@ function MRISection() {
     const location = useLocation();
     const initialImageURL = (location.state as { imageURL: string })?.imageURL;
     const [localImage, setLocalImage] = useState<string | null>(initialImageURL || null);
-    const [dicomFileName, setDicomFileName] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const imageInputRef = useRef<HTMLInputElement>(null);
-    const dicomInputRef = useRef<HTMLInputElement>(null);
-
-    // Handle regular image files
-    const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle file selection
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
         if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
@@ -23,24 +20,12 @@ function MRISection() {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setLocalImage(imageUrl);
-            setDicomFileName(null); // Clear DICOM if a new image is uploaded
         }
     };
 
-    // Handle DICOM file upload
-    const handleDICOMFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-
-        if (file && !file.name.endsWith('.dcm')) {
-            alert('Only DICOM (.dcm) files are allowed.');
-            event.target.value = '';
-            return;
-        }
-
-        if (file) {
-            setDicomFileName(file.name);
-            setLocalImage(null); // Clear image if a new DICOM is uploaded
-        }
+    // Trigger hidden file input
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
     };
 
     return (
@@ -61,52 +46,34 @@ function MRISection() {
                     <span className="bg-orange-500 w-15 h-2 inline-block ml-2"></span>
                 </div>
 
-                {/* Display Image or DICOM */}
+                {/* ACL Tear MRI Image */}
                 {localImage ? (
                     <img src={localImage} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[80%] w-[80%]" />
-                ) : dicomFileName ? (
-                    <p className="pt-24 text-center text-orange-800">
-                        DICOM file uploaded: <strong>{dicomFileName}</strong><br />
-                        {/* Placeholder: actual DICOM viewer would be embedded here */}
-                    </p>
                 ) : (
                     <p className="pt-24">No image found.</p>
                 )}
 
                 {/* TODO: add functionality to the buttons */}
                 {/* Buttons */}
-                <div className="mt-6 mb-4 grid grid-cols-2 gap-2 w-full max-w-md px-4">
+                <div className="mt-6 mb-4 grid grid-cols-3 gap-2 w-full max-w-md px-4">
                     <button
-                        onClick={() => imageInputRef.current?.click()}
+                        onClick={handleUploadClick}
                         className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
                     >
                         Upload X-Ray
                     </button>
-                    <button
-                        onClick={() => dicomInputRef.current?.click()}
-                        className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
-                    >
-                        Upload DICOM
-                    </button>
+                    {/* <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload DICOM</button> */}
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Clear Chat</button>
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">New Thread</button>
                 </div>
 
-                {/* Hidden Inputs */}
+                {/* Hidden File Input */}
                 <input
                     type="file"
                     accept="image/jpeg, image/png"
-                    ref={imageInputRef}
+                    ref={fileInputRef}
                     style={{ display: 'none' }}
-                    onChange={handleImageFileChange}
-                />
-
-                <input
-                    type="file"
-                    accept=".dcm"
-                    ref={dicomInputRef}
-                    style={{ display: 'none' }}
-                    onChange={handleDICOMFileChange}
+                    onChange={handleFileChange}
                 />
             </div>
         </section>
