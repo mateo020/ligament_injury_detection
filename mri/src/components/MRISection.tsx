@@ -55,13 +55,16 @@ function MRISection() {
 
                 {/* TODO: add functionality to the buttons */}
                 {/* Buttons */}
-                <div className="mt-6 mb-4 grid grid-cols-3 gap-2 w-full max-w-md px-4">
-                    <button
+                <div className="mt-6 mb-4 grid grid-cols-2 gap-2 w-full max-w-md px-4">
+                    <div className="col-span-2">
+                        <button
                         onClick={handleUploadClick}
-                        className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
-                    >
-                        Upload X-Ray
-                    </button>
+                        className="main w-full bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
+                        >
+                            Upload X-Ray
+                        </button>
+                    </div>
+                    
                     {/* <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload DICOM</button> */}
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Clear Chat</button>
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">New Thread</button>
