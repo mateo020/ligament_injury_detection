@@ -1,8 +1,32 @@
 import { useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
 
 function MRISection() {
     const location = useLocation();
-    const imageURL = (location.state as { imageURL: string })?.imageURL;
+    const initialImageURL = (location.state as { imageURL: string })?.imageURL;
+    const [localImage, setLocalImage] = useState<string | null>(initialImageURL || null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Handle file selection
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+            alert('Only JPG or PNG images are allowed.');
+            event.target.value = '';
+            return;
+        }
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setLocalImage(imageUrl);
+        }
+    };
+
+    // Trigger hidden file input
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
 
     return (
         <section className="bg-gray-50 w-1/2 flex justify-center rounded-2xl relative">
@@ -23,26 +47,37 @@ function MRISection() {
                 </div>
 
                 {/* ACL Tear MRI Image */}
-                {/* <img 
-                    // TODO: change this image to uploaded image
-                    src="https://upload.orthobullets.com/topic/3008/images/discon.jpg"
-                    alt="bones"
-                    className=" pl-35 pt-24 md:pt-12 h-[85%] w-[85%]"
-                />  */}
-                {imageURL ? (
-                    <img src={imageURL} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[85%] w-[85%]" />
-                    ) : (
-                     <p>No image found.</p>
+                {localImage ? (
+                    <img src={localImage} alt="Uploaded" className="pl-35 pt-24 md:pt-12 h-[80%] w-[80%]" />
+                ) : (
+                    <p className="pt-24">No image found.</p>
                 )}
 
                 {/* TODO: add functionality to the buttons */}
                 {/* Buttons */}
                 <div className="mt-6 mb-4 grid grid-cols-2 gap-2 w-full max-w-md px-4">
-                    <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload X-Ray</button>
-                    <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload DICOM</button>
+                    <div className="col-span-2">
+                        <button
+                        onClick={handleUploadClick}
+                        className="main w-full bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md"
+                        >
+                            Upload X-Ray
+                        </button>
+                    </div>
+                    
+                    {/* <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Upload DICOM</button> */}
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">Clear Chat</button>
                     <button className="main bg-orange-500/50 text-orange-800 px-4 py-2 rounded-md">New Thread</button>
                 </div>
+
+                {/* Hidden File Input */}
+                <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                />
             </div>
         </section>
     );
