@@ -9,9 +9,9 @@ from tqdm import tqdm
 import torch 
 import torch.nn.functional as F 
 
-from modules.models.base import BasicModel
-from modules.ema import EMAModel
-from modules.utils import kl_gaussians
+from models.base import BasicModel
+from ema import EMAModel
+from utils import kl_gaussians
 
 class DiffusionPipeline(BasicModel):
     def __init__(self, 

@@ -11,9 +11,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.utils import save_image
 
-from modules.models.base import DownBlock, UpBlock, BasicBlock, BasicResBlock, UnetResBlock, UnetBasicBlock
-from modules.losses import hinge_d_loss, LPIPS
-from modules.models.base import BasicModel, VeryBasicModel
+from models.base import DownBlock, UpBlock, BasicBlock, BasicResBlock, UnetResBlock, UnetBasicBlock
+from losses import hinge_d_loss, LPIPS
+from models.base import BasicModel, VeryBasicModel
 import wandb
 from monai.networks.layers.utils import get_act_layer
 
@@ -64,7 +64,7 @@ class LearnedSinusoidalPosEmb(nn.Module):
             fouriered = torch.nn.functional.pad(fouriered, (0, 1, 0, 0))
         return fouriered
 
-
+#Time embedding 
 class TimeEmbbeding(nn.Module):
     def __init__(
             self, 

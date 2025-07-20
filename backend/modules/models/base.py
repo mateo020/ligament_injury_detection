@@ -12,7 +12,7 @@ from monai.networks.layers import Pool, Conv
 from monai.networks.layers.utils import get_act_layer, get_norm_layer, get_dropout_layer
 from monai.utils.misc import ensure_tuple_rep
 
-from modules.models.attention import Attention, zero_module
+from models.attention import Attention, zero_module
 
 import pytorch_lightning as pl
 
@@ -225,6 +225,7 @@ class BasicUp(nn.Module):
 
 
 class BasicBlock(nn.Module):
+    # Conv → Norm → Dropout → Act
     """
     A block that consists of Conv-Norm-Drop-Act, similar to blocks.Convolution. 
     
@@ -285,6 +286,7 @@ class BasicBlock(nn.Module):
         return out
 
 class BasicResBlock(nn.Module):
+    # (Conv → Act → Norm → Dropout)  +  Skip Connection
     """
         A block that consists of Conv-Act-Norm + skip. 
     

@@ -3,12 +3,12 @@ import torch
 import torch.nn as nn 
 from monai.networks.blocks import UnetOutBlock
 
-from modules.models.base import (
+from models.base import (
     BasicBlock, UpBlock, DownBlock, UnetBasicBlock, 
     UnetResBlock, save_add, BasicDown, BasicUp, SequentialEmb
 )
-from modules.models.attention import Attention, zero_module
-from modules.models.autoencoders import TimeEmbbeding
+from models.attention import Attention, zero_module
+from models.autoencoders import TimeEmbbeding
 
 class UNet(nn.Module):
     def __init__(self, 
@@ -63,6 +63,7 @@ class UNet(nn.Module):
         
         
         # ----------- Encoder ------------
+        #Each element in self.in_blocks is either  a convBLock + attention  or a basic Down layer that halfs the spatial size
         in_blocks = [] 
         for i in range(1, self.depth):
             for k in range(num_res_blocks):
@@ -113,7 +114,9 @@ class UNet(nn.Module):
         self.in_blocks = nn.ModuleList(in_blocks)
         
         # ----------- Middle ------------
+        #compressed representation with another round of convolutionstion -> attention -> conv
         self.middle_block = SequentialEmb(
+            #first conv refines the bottom level features 
             ConvBlock(
                 spatial_dims=spatial_dims,
                 in_channels=hid_chs[-1],
@@ -125,6 +128,7 @@ class UNet(nn.Module):
                 dropout=dropout,
                 emb_channels=time_emb_dim
             ),
+            #allows the network mix information across entire feature map at that scale
             Attention(
                 spatial_dims=spatial_dims,
                 in_channels=hid_chs[-1],
@@ -137,6 +141,7 @@ class UNet(nn.Module):
                 emb_dim=time_emb_dim,
                 attention_type=use_attention[-1]
             ),
+            #more processing before upsampling
             ConvBlock(
                 spatial_dims=spatial_dims,
                 in_channels=hid_chs[-1],
@@ -153,6 +158,7 @@ class UNet(nn.Module):
  
      
         # ------------ Decoder ----------
+        #gradually upsample back to original resolution merging coarse and fine features via skip connections
         out_blocks = [] 
         for i in range(1, self.depth):
             for k in range(num_res_blocks+1):
@@ -241,6 +247,7 @@ class UNet(nn.Module):
             x_t = torch.cat([x_t, self_cond], dim=1)  
     
         # --------- Encoder --------------
+        # Skip Connections: Every blocks output is stored in a python list x.append() and latter popped off to feed into decodeder
         x = [self.in_conv(x_t)]
         for i in range(len(self.in_blocks)):
             x.append(self.in_blocks[i](x[i], emb))
