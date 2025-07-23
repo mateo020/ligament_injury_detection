@@ -52,14 +52,14 @@ class   SKMTeaDataset(torch.utils.data.Dataset):
 
         if transform is None: 
             self.transform = T.Compose([
-            T.ToTensor(),  
-            nn.Identity(),                             # <-- no-op passthrough
-            T.Resize(resize)     if resize     else T.Lambda(lambda x: x),
-            T.RandomHorizontalFlip(p=horizontal_flip) if horizontal_flip else T.Lambda(lambda x: x),
-            T.RandomVerticalFlip(p=vertical_flip)     if vertical_flip   else T.Lambda(lambda x: x),
-            T.RandomCrop(random_crop_size)             if random_crop_size else T.Lambda(lambda x: x),
-            T.RandomRotation(rotation, fill=-1)        if rotation        else T.Lambda(lambda x: x),
-            T.ConvertImageDtype(dtype),
+                T.Resize(resize) if resize is not None else nn.Identity(),
+                T.RandomHorizontalFlip(p=horizontal_flip) if horizontal_flip else nn.Identity(),
+                T.RandomVerticalFlip(p=vertical_flip) if vertical_flip else nn.Identity(),
+                T.RandomCrop(random_crop_size) if random_crop_size is not None else nn.Identity(),
+                T.RandomRotation(rotation, fill=-1) if rotation is not None else nn.Identity(),
+                T.ConvertImageDtype(dtype),
+                # WARNING: mean and std are not the target values but rather the values to subtract and divide by: [0, 1] -> [0-0.5, 1-0.5]/0.5 -> [-1, 1]
+    
         ])
         else:
             self.transform = transform
@@ -125,6 +125,8 @@ class SKMTeaDataModule(LightningDataModule):
             self.data = torch.from_numpy(img_data)
         elif self.stage == "second":
             self.data = np.load(self.train_dir)
+            self.data = torch.from_numpy(self.data)
+
         else:
             raise ValueError(f"setup() received unknown stage: {self.stage!r}. "
                             "Expected 'first' or 'second'.")
