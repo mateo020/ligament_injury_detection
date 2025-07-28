@@ -126,7 +126,9 @@ class SKMTeaDataModule(LightningDataModule):
         elif self.stage == "second":
             self.data = np.load(self.train_dir)
             self.data = torch.from_numpy(self.data)
-
+            self.data = self.data.permute(0,4,1,2,3)
+            self.data = self.data.reshape(-1, self.data.size(2), self.data.size(3), self.data.size(4))
+            print(self.data)
         else:
             raise ValueError(f"setup() received unknown stage: {self.stage!r}. "
                             "Expected 'first' or 'second'.")
